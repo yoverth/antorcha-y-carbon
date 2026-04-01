@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { FaChevronDown } from "react-icons/fa";
@@ -47,13 +49,24 @@ export default function HeroSection() {
           <Button
             size="lg"
             className="bg-primary hover:bg-primary/90 text-primary-foreground px-8 py-6 text-lg"
+            onClick={() => {
+              document
+                .getElementById("menu")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
           >
             Ver Nuestra Carta
           </Button>
+
           <Button
             size="lg"
             variant="outline"
             className="border-foreground/30 text-foreground hover:bg-foreground/10 px-8 py-6 text-lg"
+            onClick={() => {
+              document
+                .getElementById("historia")
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
           >
             Nuestra Historia
           </Button>

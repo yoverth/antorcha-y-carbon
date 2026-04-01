@@ -1,16 +1,32 @@
-import Link from "next/link"
-import { FaTiktok, FaWhatsapp, FaFacebook, FaInstagram, FaFire } from "react-icons/fa"
+import Link from "next/link";
+import {
+  FaTiktok,
+  FaWhatsapp,
+  FaFacebook,
+  FaInstagram,
+  FaFire,
+} from "react-icons/fa";
 
 const socialLinks = [
-  { icon: FaTiktok, href: "#", label: "TikTok" },
-  { icon: FaWhatsapp, href: "#", label: "WhatsApp" },
-  { icon: FaFacebook, href: "#", label: "Facebook" },
-  { icon: FaInstagram, href: "#", label: "Instagram" },
-]
+  {
+    icon: FaTiktok,
+    href: "https://www.tiktok.com/@antorcha_pasto",
+    label: "TikTok",
+  },
+  { icon: FaWhatsapp, href: "https://wa.me/573207850354", label: "WhatsApp" },
+  {
+    icon: FaFacebook,
+    href: "https://www.facebook.com/Antorchacarbon",
+    label: "Facebook",
+  },
+  {
+    icon: FaInstagram,
+    href: "https://www.instagram.com/antorchaycarbon2019/",
+    label: "Instagram",
+  },
+];
 
-const footerLinks = [
-  { href: "#", label: "Privacidad" },
-]
+const footerLinks = [{ href: "#", label: "Privacidad" }];
 
 export default function Footer() {
   return (
@@ -55,5 +71,5 @@ export default function Footer() {
         </div>
       </div>
     </footer>
-  )
+  );
 }

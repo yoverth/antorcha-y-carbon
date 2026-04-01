@@ -1,21 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
-import { HiOutlineMenu } from "react-icons/hi"
-import { FaFire } from "react-icons/fa"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { HiOutlineMenu } from "react-icons/hi";
+import { FaFire } from "react-icons/fa";
 
 const navLinks = [
   { href: "#menu", label: "Menú" },
   { href: "#promociones", label: "Promociones" },
   { href: "#nosotros", label: "Nosotros" },
   { href: "#ubicacion", label: "Ubicación" },
-]
+];
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-background/90 backdrop-blur-md border-b border-border/50">
@@ -42,11 +42,17 @@ export default function Header() {
             ))}
           </div>
 
-          {/* CTA Button */}
+          {/* CTA Button Desktop */}
           <div className="hidden md:block">
-            <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-              Reserva
-            </Button>
+            <a
+              href="https://wa.me/573207850354"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
+                Reserva
+              </Button>
+            </a>
           </div>
 
           {/* Mobile Menu */}
@@ -68,14 +74,22 @@ export default function Header() {
                     {link.label}
                   </Link>
                 ))}
-                <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-4">
-                  Reserva
-                </Button>
+
+                {/* CTA Button Mobile */}
+                <a
+                  href="https://wa.me/573207850354"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Button className="bg-primary hover:bg-primary/90 text-primary-foreground mt-4 w-full">
+                    Reserva
+                  </Button>
+                </a>
               </div>
             </SheetContent>
           </Sheet>
         </nav>
       </div>
     </header>
-  )
+  );
 }
