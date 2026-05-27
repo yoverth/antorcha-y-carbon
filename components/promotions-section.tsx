@@ -82,14 +82,14 @@ function PromotionCard({ promo }: { promo: Promotion }) {
 
   return (
     <Card className="group overflow-hidden border-border/50 bg-card hover:border-primary/50 transition-all duration-300">
-      <div className="relative aspect-[16/9] overflow-hidden">
+      <div className="relative aspect-video overflow-hidden">
         <Image
           src={promo.image}
           alt={promo.title}
           fill
           className="object-cover transition-transform duration-500 group-hover:scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-background via-background/40 to-transparent" />
 
         {/* Discount Badge */}
         <div className="absolute top-4 right-4 bg-primary text-primary-foreground rounded-full w-16 h-16 flex flex-col items-center justify-center shadow-lg">
@@ -134,9 +134,18 @@ function PromotionCard({ promo }: { promo: Promotion }) {
         </div>
 
         {/* CTA */}
-        <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
-          <FaWhatsapp className="w-4 h-4 mr-2" /> Reservar Promo
-        </Button>
+        <a
+          href={`https://wa.me/573207850354?text=${encodeURIComponent(
+            `Hola, quiero reservar la promo: ${promo.title}`,
+          )}`}
+          target="_blank"
+          rel="noreferrer"
+          className="w-full"
+        >
+          <Button className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
+            <FaWhatsapp className="w-4 h-4 mr-2" /> Reservar Promo
+          </Button>
+        </a>
       </CardContent>
     </Card>
   );
@@ -172,7 +181,7 @@ export default function PromotionsSection() {
               fill
               className="object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-r from-background via-background/80 to-transparent" />
           </div>
           <div className="relative z-10 py-12 px-8 md:px-12">
             <div className="max-w-lg">
@@ -187,19 +196,28 @@ export default function PromotionsSection() {
                 casa. Solo presenta tu documento de identidad y disfruta.
               </p>
               <div className="flex flex-wrap gap-4">
+                <a
+                href={`https://wa.me/573207850354?text=${encodeURIComponent(
+                  "Hola, quiero reservar la promo destacada y recibir más información."
+                )}`}
+                target="_blank"
+                rel="noreferrer"
+                className="w-full sm:w-auto"
+              >
                 <Button
                   size="lg"
-                  className="bg-primary hover:bg-primary/90 text-primary-foreground"
+                  className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground"
                 >
                   <FaWhatsapp className="w-5 h-5 mr-2" /> Reservar Ahora
                 </Button>
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="border-foreground/30 text-foreground hover:bg-foreground/10"
-                >
-                  Ver Condiciones
-                </Button>
+              </a>
+              <Button
+                size="lg"
+                variant="outline"
+                className="border-foreground/30 text-foreground hover:bg-foreground/10"
+              >
+                Ver Condiciones
+              </Button>
               </div>
             </div>
           </div>
@@ -217,6 +235,14 @@ export default function PromotionsSection() {
           <p className="text-muted-foreground mb-4">
             ¿Tienes un evento especial? Contáctanos para ofertas personalizadas.
           </p>
+          <a
+          href={`https://wa.me/573207850354?text=${encodeURIComponent(
+            "Hola, quiero solicitar una cotización para un evento especial."
+          )}`}
+          target="_blank"
+          rel="noreferrer"
+          className="inline-block"
+        >
           <Button
             variant="outline"
             size="lg"
@@ -224,6 +250,7 @@ export default function PromotionsSection() {
           >
             <FaPercent className="w-4 h-4 mr-2" /> Solicitar Cotización
           </Button>
+        </a>
         </div>
       </div>
     </section>

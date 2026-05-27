@@ -8,12 +8,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { FaPlus, FaUtensils, FaStar, FaFish, FaLeaf } from "react-icons/fa";
+import { FaPlus, FaUtensils, FaStar, FaFish, FaWhatsapp } from "react-icons/fa";
 import { GiMeat } from "react-icons/gi";
 import { MdRestaurantMenu } from "react-icons/md";
 
@@ -239,19 +240,25 @@ const menuData: MenuCategory[] = [
   },
 ];
 
-function MenuItemCard({ item }: { item: MenuItem }) {
+function MenuItemCard({
+  item,
+  onAddToCart,
+}: {
+  item: MenuItem
+  onAddToCart: (item: MenuItem) => void
+}) {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Card className="group cursor-pointer overflow-hidden border-border/50 bg-card hover:border-primary/50 transition-all duration-300">
-          <div className="relative aspect-[4/3] overflow-hidden">
+          <div className="relative aspect-4/3 overflow-hidden">
             <Image
               src={item.image}
               alt={item.name}
               fill
               className="object-cover transition-transform duration-500 group-hover:scale-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent" />
+            <div className="absolute inset-0 bg-linear-to-t from-background/90 via-background/20 to-transparent" />
             {item.isPopular && (
               <Badge className="absolute top-3 left-3 bg-primary text-primary-foreground">
                 <FaStar className="w-3 h-3 mr-1" /> Popular
@@ -288,13 +295,33 @@ function MenuItemCard({ item }: { item: MenuItem }) {
         <p className="text-muted-foreground leading-relaxed">
           {item.description}
         </p>
-        <div className="flex items-center justify-between pt-4">
+        <div className="flex flex-col gap-3 pt-4 sm:flex-row sm:items-center sm:justify-between">
           <span className="text-2xl font-bold text-primary">
             ${item.price.toLocaleString("es-CO")}
           </span>
-          <Button className="bg-primary hover:bg-primary/90 text-primary-foreground">
-            <FaPlus className="w-4 h-4 mr-2" /> Agregar
-          </Button>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <DialogClose asChild>
+              <Button
+                onClick={() => onAddToCart(item)}
+                className="bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                <FaPlus className="w-4 h-4 mr-2" /> Agregar
+              </Button>
+            </DialogClose>
+            <a
+              href={`https://wa.me/573207850354?text=${encodeURIComponent(
+                `Hola, quiero pedir:\n- ${item.name} - $${item.price.toLocaleString(
+                  "es-CO",
+                )}`,
+              )}`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Button className="bg-[#25D366] hover:bg-[#25D366]/90 text-white">
+                <FaWhatsapp className="w-4 h-4 mr-2" /> WhatsApp
+              </Button>
+            </a>
+          </div>
         </div>
       </DialogContent>
     </Dialog>
@@ -303,6 +330,24 @@ function MenuItemCard({ item }: { item: MenuItem }) {
 
 export default function MenuSection() {
   const [activeTab, setActiveTab] = useState("carta");
+  const [cartItems, setCartItems] = useState<MenuItem[]>([]);
+
+  const whatsappPhone = "573207850354";
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.price, 0);
+  const cartMessage = cartItems.length
+    ? `Hola, quiero hacer un pedido:\n${cartItems
+        .map(
+          (item, index) => `${index + 1}. ${item.name} - $${item.price.toLocaleString("es-CO")}`,
+        )
+        .join("\n")}\nTotal: $${totalPrice.toLocaleString("es-CO")}`
+    : "Hola, quiero pedir, pero aún no he agregado ningún producto.";
+  const whatsappLink = `https://wa.me/${whatsappPhone}?text=${encodeURIComponent(
+    cartMessage,
+  )}`;
+
+  const addToCart = (item: MenuItem) => {
+    setCartItems((current) => [...current, item]);
+  };
 
   return (
     <section id="menu" className="py-20 bg-background">
@@ -322,6 +367,110 @@ export default function MenuSection() {
             Descubre todos nuestros platos, preparados con los mejores
             ingredientes y el sabor único de la brasa tradicional nariñense.
           </p>
+        </div>
+
+        <div className="mb-10 grid gap-6 lg:grid-cols-[1.8fr_1fr]">
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+            <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-2">
+              Reserva tu pedido
+            </p>
+            <h3 className="font-serif text-3xl font-bold text-foreground mb-3">
+              Haz tu pedido por WhatsApp
+            </h3>
+            <p className="text-muted-foreground leading-relaxed">
+              Agrega tus platos favoritos al carrito y envía el pedido directamente a nuestro WhatsApp. Así podemos prepararlo rápido y con atención personalizada.
+            </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
+              {cartItems.length > 0 ? (
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full sm:w-auto"
+                >
+                  <Button className="w-full sm:w-auto bg-[#25D366] hover:bg-[#25D366]/90 text-white">
+                    <FaWhatsapp className="w-4 h-4 mr-2" /> Enviar pedido
+                  </Button>
+                </a>
+              ) : (
+                <Button
+                  disabled
+                  className="w-full sm:w-auto bg-[#25D366]/70 text-white cursor-not-allowed"
+                >
+                  <FaWhatsapp className="w-4 h-4 mr-2" /> Enviar pedido
+                </Button>
+              )}
+              {cartItems.length > 0 && (
+                <Button
+                  onClick={() => setCartItems([])}
+                  className="w-full sm:w-auto border border-border bg-transparent text-foreground hover:bg-secondary/10"
+                >
+                  Vaciar carrito
+                </Button>
+              )}
+            </div>
+          </div>
+
+          <div className="rounded-3xl border border-border bg-card p-6 shadow-sm">
+            <p className="text-sm uppercase tracking-[0.3em] text-muted-foreground mb-2">
+              Carrito de pedidos
+            </p>
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-lg font-semibold text-foreground">
+                {cartItems.length} ítem{cartItems.length === 1 ? "" : "s"}
+              </span>
+              <span className="text-sm text-muted-foreground">
+                Total
+              </span>
+            </div>
+            <div className="space-y-3 mb-4">
+              {cartItems.length > 0 ? (
+                cartItems.map((item, index) => (
+                  <div
+                    key={`${item.id}-${index}`}
+                    className="rounded-2xl border border-border/50 bg-background/60 p-3"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <span className="text-sm font-medium text-foreground">
+                        {item.name}
+                      </span>
+                      <span className="text-sm text-primary font-semibold">
+                        ${item.price.toLocaleString("es-CO")}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  Añade platos al carrito para verlos aquí.
+                </p>
+              )}
+            </div>
+            <div className="mb-4 flex flex-col gap-3">
+              {cartItems.length > 0 ? (
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full"
+                >
+                  <Button className="w-full bg-[#25D366] hover:bg-[#25D366]/90 text-white">
+                    <FaWhatsapp className="w-4 h-4 mr-2" /> Enviar pedido
+                  </Button>
+                </a>
+              ) : (
+                <Button
+                  disabled
+                  className="w-full bg-[#25D366]/70 text-white cursor-not-allowed"
+                >
+                  <FaWhatsapp className="w-4 h-4 mr-2" /> Enviar pedido
+                </Button>
+              )}
+            </div>
+            <div className="rounded-2xl bg-secondary/10 p-4 text-sm text-muted-foreground">
+              El carrito se envía con el botón de WhatsApp aquí. Guarda tu pedido y confirma con un mensaje.
+            </div>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -346,7 +495,11 @@ export default function MenuSection() {
             <TabsContent key={category.id} value={category.id} className="mt-0">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {category.items.map((item) => (
-                  <MenuItemCard key={item.id} item={item} />
+                  <MenuItemCard
+                    key={item.id}
+                    item={item}
+                    onAddToCart={addToCart}
+                  />
                 ))}
               </div>
             </TabsContent>
